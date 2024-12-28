@@ -19,13 +19,13 @@ if 'task' not in st.session_state:
 if 'module' not in st.session_state:
     st.session_state.module = None
 
-# ---- Task Selection ----
+# ---- Main Title ----
 st.title("🤖 **Predictor Task Hub**")
 st.write("""
 Welcome to the Predictor Task Hub! Choose between Regression or Classification tasks to proceed.
 """)
 
-# Sidebar Task Selection
+# ---- Sidebar Task Selection ----
 st.sidebar.title("🛠️ **Select Task**")
 task = st.sidebar.radio(
     "Choose a Task:",
@@ -36,21 +36,19 @@ task = st.sidebar.radio(
 # Update Session State with Task
 if task:
     st.session_state.task = task
-    st.session_state.module = None  # Reset module when task changes
+    st.session_state.module = None  # Reset module when switching tasks
 
-# ---- Dynamic Module Navigation ----
+# ---- Debug: Print Current Session State ----
+st.write("### 🐞 **Debug Information:**")
+st.write(f"Task: `{st.session_state.task}`")
+st.write(f"Module: `{st.session_state.module}`")
+
+# ---- Module Navigation ----
 if st.session_state.task == "Regression":
     st.sidebar.title("📊 **Regression Modules**")
     module = st.sidebar.radio(
         "Navigate:",
-        [
-            "Train Model",
-            "Evaluate Performance",
-            "Hyperparameter Tuning",
-            "Compare Models",
-            "Predict",
-            "Data Dashboard"
-        ],
+        ["Train Model", "Evaluate Performance", "Hyperparameter Tuning", "Compare Models", "Predict", "Data Dashboard"],
         index=None if st.session_state.module is None else [
             "Train Model",
             "Evaluate Performance",
@@ -60,8 +58,9 @@ if st.session_state.task == "Regression":
             "Data Dashboard"
         ].index(st.session_state.module)
     )
-    st.session_state.module = module  # Update selected module in session state
+    st.session_state.module = module
     
+    # Explicit Module Mapping
     if module == "Train Model":
         from modules.regression.regression_train import run
     elif module == "Evaluate Performance":
@@ -74,24 +73,18 @@ if st.session_state.task == "Regression":
         from modules.regression.regression_predictor import run
     elif module == "Data Dashboard":
         from modules.regression.regression_dashboard import run
-    
+
     if module:
+        st.write(f"### 🚀 **You selected: Regression → {module}**")
         run()
     else:
-        st.info("Please select a regression module to proceed.")
+        st.info("ℹ️ Please select a regression module to proceed.")
 
 elif st.session_state.task == "Classification":
     st.sidebar.title("📊 **Classification Modules**")
     module = st.sidebar.radio(
         "Navigate:",
-        [
-            "Train Model",
-            "Evaluate Performance",
-            "Hyperparameter Tuning",
-            "Compare Models",
-            "Predict",
-            "Data Dashboard"
-        ],
+        ["Train Model", "Evaluate Performance", "Hyperparameter Tuning", "Compare Models", "Predict", "Data Dashboard"],
         index=None if st.session_state.module is None else [
             "Train Model",
             "Evaluate Performance",
@@ -101,8 +94,9 @@ elif st.session_state.task == "Classification":
             "Data Dashboard"
         ].index(st.session_state.module)
     )
-    st.session_state.module = module  # Update selected module in session state
-    
+    st.session_state.module = module
+
+    # Explicit Module Mapping
     if module == "Train Model":
         from modules.classification.train_model import run
     elif module == "Evaluate Performance":
@@ -115,14 +109,15 @@ elif st.session_state.task == "Classification":
         from modules.classification.predictor import run
     elif module == "Data Dashboard":
         from modules.classification.dashboard import run
-    
+
     if module:
+        st.write(f"### 🚀 **You selected: Classification → {module}**")
         run()
     else:
-        st.info("Please select a classification module to proceed.")
+        st.info("ℹ️ Please select a classification module to proceed.")
 else:
-    st.info("Please select a task from the sidebar to continue.")
+    st.info("ℹ️ Please select a task from the sidebar to continue.")
 
 # ---- Footer ----
 st.write("---")
-st.info("Tip: Use the sidebar to navigate between modules and interact with your dataset efficiently.")
+st.info("💡 Tip: Use the sidebar to navigate between modules and interact with your dataset efficiently.")

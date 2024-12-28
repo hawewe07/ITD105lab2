@@ -1,0 +1,16 @@
+# Python virtual environment
+venv/
+
+# Cache files
+__pycache__/
+*.pyc
+
+# IDE configuration
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Model artifacts
+models/*.pkl
